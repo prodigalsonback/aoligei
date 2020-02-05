@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+       http://www.springframework.org/schema/beans/spring-beans.xsd  
+       http://www.springframework.org/schema/context  
+       http://www.springframework.org/schema/context/spring-context.xsd  
+       http://www.springframework.org/schema/mvc  
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+	<!-- 配置扫描的包 -->
+	<context:component-scan base-package="com.chenyr.*" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+
+	<!-- 这个是注解驱动 -->
+	<mvc:annotation-driven />
+    <!-- 处理静态资源  -->
+	<mvc:default-servlet-handler />
+
+
+
+	<!-- 配置视图解析器 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- <property name=""></property> 暂时不需要配置 -->
+		<property name="redirectContextRelative" value="true"></property>
+		<property name="prefix" value="/WEB-INF/web-jsp/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+
+	<mvc:interceptors>
+		<!-- 国际化操作拦截器 如果采用基于（请求/Session/Cookie）则必需配置 --> 
+        <!-- <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" /> -->  
+        <!-- 如果不定义 mvc:mapping path 将拦截所有的URL请求 -->
+           	<mvc:interceptor>
+           				<!-- 扫描所有 -->
+           			 <mvc:mapping path="/**" /> 
+           			 <!-- 不扫描 -->
+           			 <mvc:exclude-mapping path="/web-jsp/home.jsp"/><!-- 首页-->
+           			 <mvc:exclude-mapping path="/homePage.do"/><!-- 返回首页-->
+           			 <mvc:exclude-mapping path="/tribune.do"/><!-- 论坛-->
+           			 <mvc:exclude-mapping path="/login.do"/><!-- 登录-->
+           			 <mvc:exclude-mapping path="/handleLogin.do"/><!--处理登录-->
+           			 <mvc:exclude-mapping path="/reg.do"/><!-- 注册-->
+           			 <mvc:exclude-mapping path="/handleReg.do"/><!--处理注册-->
+
+        <bean class="com.chenyr.interceptor.Interceptor"></bean>
+           	</mvc:interceptor>
+        
+	
+	</mvc:interceptors>
+
+	
+
+   
+
+	<!-- 模板 -->
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<constructor-arg ref="dataSource"></constructor-arg>
+	</bean>
+
+</beans>

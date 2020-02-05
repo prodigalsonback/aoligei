@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+	"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.chenyr.mapper.InTribuneMapper">
+	<insert id="addiComments"
+		parameterType="com.chenyr.entity.InnerTribune"
+		useGeneratedKeys="true"
+		keyProperty="id">
+		INSERT INTO inner_tribune (
+			oid,iuname,iuip,iuagent,created_time_inner,icomment
+		) VALUES (
+			#{oid},
+			#{iuname},
+			#{iuip},
+			#{iuagent},
+			#{createdTimeInner},
+			#{icomment}
+		)
+	</insert>
+</mapper>

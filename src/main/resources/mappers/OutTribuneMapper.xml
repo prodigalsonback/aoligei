@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+	"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.chenyr.mapper.OutTribuneMapper">
+<resultMap type="com.chenyr.entity.OutterTribune" id="OutMapper">
+<result column="id" jdbcType="INTEGER" property="id"/>
+<result column="tid" jdbcType="INTEGER" property="tid"/>
+<result column="uname" jdbcType="VARCHAR" property="uname"/>
+<result column="uip" jdbcType="VARCHAR" property="uip"/>
+<result column="uagent" jdbcType="VARCHAR" property="uagent"/>
+<result column="created_time" jdbcType="VARCHAR" property="createdTime"/>
+<result column="comment" jdbcType="VARCHAR" property="comment"/>
+<collection property="listOfTribunes" ofType="com.chenyr.entity.InnerTribune">
+	<result column="id" jdbcType="INTEGER" property="id"/>
+	<result column="oid" jdbcType="INTEGER" property="oid"/>
+	<result column="iuname" jdbcType="VARCHAR" property="iuname"/>
+	<result column="iuip" jdbcType="VARCHAR" property="iuip"/>
+	<result column="iuagent" jdbcType="VARCHAR" property="iuagent"/>
+	<result column="created_time_inner" jdbcType="VARCHAR" property="createdTimeInner"/>
+	<result column="icomment" jdbcType="VARCHAR" property="icomment"/>
+</collection>
+</resultMap>
+<select id="getOutterTribuneList" resultMap="OutMapper">
+	select a.id,a.tid,a.uname,a.uip,a.uagent,a.created_time,a.comment,b.id,b.oid,
+	b.iuname,b.iuip,b.iuagent,b.created_time_inner,b.icomment from outter_tribune a left join inner_tribune b 
+	on a.id=b.oid where a.tid = #{tid}
+</select>
+<insert id="addoComments"
+		parameterType="com.chenyr.entity.OutterTribune"
+		useGeneratedKeys="true"
+		keyProperty="id">
+		INSERT INTO outter_tribune (
+			tid,uname,uip,uagent,created_time,comment
+		) VALUES (
+			#{tid},
+			#{uname},
+			#{uip},
+			#{uagent},
+			#{createdTime},
+			#{comment}
+		)
+	</insert>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

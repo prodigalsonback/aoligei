@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+	"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.chenyr.mapper.UserMapper">
+<select id="findUserByUsername"
+        resultType="com.chenyr.entity.User">
+  select id,usename,pasword,createduser_time AS createdUserTime,rank from t_user 
+  where usename=#{username}
+</select>
+<insert id="reg"
+		parameterType="com.chenyr.entity.User"
+		useGeneratedKeys="true"
+		keyProperty="id">
+		INSERT INTO t_user (
+			usename, pasword, createduser_time,
+			rank
+		) VALUES (
+			#{usename},#{pasword},#{createdUserTime},
+			#{rank}
+		)
+</insert>
+</mapper>

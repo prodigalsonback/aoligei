@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"  
+	xmlns:jee="http://www.springframework.org/schema/jee" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+	<!-- 配置上下文扫描 -->
+
+	<context:component-scan base-package="com.chenyr.*">
+			<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+
+	<!-- 加载配置文件 -->
+	<context:property-placeholder location="classpath:jdbc.properties" />
+
+	<!-- 事务的注解驱动 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<!-- 配置事务管理器DataSourceTransactionManager -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean> 
+		
+	<!-- MapperScannerConfigurer -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 使用MyBatis时定义的接口文件在哪个包中 -->
+		<property name="basePackage" 
+			value="com.chenyr.mapper" />
+	</bean>
+	
+	<!-- SqlSessionFactoryBean -->
+	<bean class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 配置XML映射文件的位置 -->
+		<property name="mapperLocations" 
+			value="classpath:mappers/*.xml" />
+		<!-- 配置数据源 -->
+		<property name="dataSource"
+			ref="dataSource" />
+	</bean>
+	<!-- 配置数据源 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${driverClassName}"></property>
+		<property name="jdbcUrl" value="${url}"></property>
+		<property name="user" value="${usern}"></property>
+		<property name="password" value="${password}"></property>
+		<!-- 最小连接池的大小 -->
+		<property name="minPoolSize" value="1"></property>
+		<!-- 最大 -->
+		<property name="maxPoolSize" value="5"></property>
+		<!-- 刚开始获取多少个链接 -->
+		<property name="initialPoolSize" value="3"></property>
+		<!-- 连接数不够的时候 获取多少条 -->
+		<property name="acquireIncrement" value="1"></property>
+
+
+
+		<!-- 连接池信息 当连接池中的连接用完时，C3P0一次性创建新连接的数目 --><!-- <property name="acquireIncrement" value="${c3p0.acquireIncrement}" 
+			/> -->
+		<!-- 初始化时创建的连接数，应在minPoolSize与maxPoolSize之间取值。默认为3； -->  <!-- <property name="initialPoolSize" value="${c3p0.initialPoolSize}" /> -->
+		<!-- 最大空闲时间，超过空闲时间的连接将被丢弃。为0或负数则永不丢弃。默认为0； -->   <!-- <property name="maxIdleTime" value="${c3p0.maxIdleTime}" /> -->
+		<!-- 连接池中保留的最小连接数。默认为15 --><!-- <property name="minPoolSize" value="${c3p0.minPoolSize}" /> -->
+		<!-- 连接池中保留的最大连接数。默认为15； --><!-- <property name="maxPoolSize" value="${c3p0.maxPoolSize}" /> -->
+		<!-- JDBC的标准参数，用以控制数据源内加载的PreparedStatement数量。但由于预缓存的Statement属 于单个Connection而不是整个连接池。所以设置这个参数需要考虑到多方面的因素，如果maxStatements与 
+			maxStatementsPerConnection均为0，则缓存被关闭。默认为0； -->
+		<!-- <property name="maxStatements" value="${c3p0.maxStatements}" /> -->
+		<!-- 连接池内单个连接所拥有的最大缓存Statement数。默认为0； -->
+		<!-- <property name="maxStatementsPerConnection" value="${c3p0.maxStatementsPerConnection}"/> -->
+
+	</bean>
+	<!-- 	 文件上传 
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" >
+		   		 p:defaultEncoding="UTF-8"  
+       					 p:maxUploadSize="1073741824"  最大1Gb
+        				 p:uploadTempDir="fileUpload/temp"  
+        				 <property name="defaultEncoding" value="utf-8"></property> 
+        				 <property name="maxUploadSize" value="1073741824"></property>
+    </bean> -->
+		
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<constructor-arg ref="dataSource"></constructor-arg>
+	</bean>
+
+
+
+</beans>
+       
