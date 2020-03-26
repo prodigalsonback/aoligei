@@ -112,7 +112,7 @@
 				</div>
 			</a>
 		</div>
-		<div class="tlinks">Collect from <a href="http://www.cssmoban.com/"  title="网站模板">网站模板</a></div>
+		
 
 		<div class="work">
 			<a href="tribune.do?tid=6">
